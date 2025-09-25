@@ -1,0 +1,222 @@
+{
+	"info": {
+		"_postman_id": "ae54ffaf-61c1-4c7f-886a-b19dd7a38d68",
+		"name": "Etkalo Igor 18.1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29585841"
+	},
+	"item": [
+		{
+			"name": "Is Valid ISBN13 Number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const cheerio = require('cheerio');\r",
+							"const $ = cheerio.load(responseBody, { xmlMode: true });\r",
+							"\r",
+							"pm.test(\"Статус 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Есть Envelope\", function () {\r",
+							"    pm.expect($(\"soap\\\\:Envelope\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Есть Body\", function () {\r",
+							"    pm.expect($(\"soap\\\\:Body\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Есть тег IsValidISBN13Response\", function () {\r",
+							"    pm.expect($(\"m\\\\:IsValidISBN13Response\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Есть тег IsValidISBN13Result\", function () {\r",
+							"    pm.expect($(\"m\\\\:IsValidISBN13Result\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Результат имеет значение boolean\", function () {\r",
+							"    let result = $(\"m\\\\:IsValidISBN13Result\").text().trim();\r",
+							"    pm.expect([\"true\", \"false\"]).to.include(result);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"В запросе есть ISBN\", function () {\r",
+							"    pm.expect(pm.request.body.toString()).to.include(\"<sISBN>\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Валидный ISBN возвращает true\", function () {\r",
+							"    if (pm.request.body.toString().includes(\"978-1-4612-9090-2\")) {\r",
+							"        let result = $(\"m\\\\:IsValidISBN13Result\").text().trim();\r",
+							"        pm.expect(result).to.eql(\"true\");\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Нет SOAP Fault\", function () {\r",
+							"    pm.expect($(\"soap\\\\:Fault\").length).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Правильный namespace\", function () {\r",
+							"    let ns = $(\"m\\\\:IsValidISBN13Response\").attr(\"xmlns:m\");\r",
+							"    pm.expect(ns).to.eql(\"http://webservices.daehosting.com/ISBN\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": "282",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <IsValidISBN13 xmlns=\"http://webservices.daehosting.com/ISBN\">\n      <sISBN>978-1-4612-9090-2</sISBN>\n    </IsValidISBN13>\n  </soap:Body>\n</soap:Envelope>"
+				},
+				"url": {
+					"raw": "http://webservices.daehosting.com/services/isbnservice.wso",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"daehosting",
+						"com"
+					],
+					"path": [
+						"services",
+						"isbnservice.wso"
+					]
+				},
+				"description": "The test is done by calculation on the first 12 digits and compare the result with the checksum number at the end. You have to pass a 13 digits number."
+			},
+			"response": []
+		},
+		{
+			"name": "Is Valid ISBN10 Number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const cheerio = require('cheerio');\r",
+							"const $ = cheerio.load(responseBody, { xmlMode: true });\r",
+							"\r",
+							"\r",
+							"pm.test(\"Статус 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Ответ начинается с <?xml\", function () {\r",
+							"    pm.expect(responseBody.startsWith(\"<?xml\")).to.be.true;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Есть Envelope\", function () {\r",
+							"    pm.expect($(\"soap\\\\:Envelope\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Есть Body\", function () {\r",
+							"    pm.expect($(\"soap\\\\:Body\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Есть тег IsValidISBN10Response\", function () {\r",
+							"    pm.expect($(\"m\\\\:IsValidISBN10Response\").length).to.be.above(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Результат не пустой\", function () {\r",
+							"    let result = $(\"m\\\\:IsValidISBN10Result\").text().trim();\r",
+							"    pm.expect(result.length).to.be.greaterThan(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"В запросе есть ISBN и он не пустой\", function () {\r",
+							"    let body = pm.request.body.toString();\r",
+							"    pm.expect(body).to.include(\"<sISBN>\");\r",
+							"    let match = body.match(/<sISBN>(.*?)<\\/sISBN>/);\r",
+							"    pm.expect(match && match[1].trim().length).to.be.greaterThan(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Валидный ISBN10 возвращает true\", function () {\r",
+							"    if (pm.request.body.toString().includes(\"0-19-852663-6\")) {\r",
+							"        let result = $(\"m\\\\:IsValidISBN10Result\").text().trim();\r",
+							"        pm.expect(result).to.eql(\"true\");\r",
+							"    }\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Нет SOAP Fault\", function () {\r",
+							"    pm.expect($(\"soap\\\\:Fault\").length).to.eql(0);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Namespace правильный\", function () {\r",
+							"    let ns = $(\"m\\\\:IsValidISBN10Response\").attr(\"xmlns:m\");\r",
+							"    pm.expect(ns).to.eql(\"http://webservices.daehosting.com/ISBN\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": "278",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <IsValidISBN10 xmlns=\"http://webservices.daehosting.com/ISBN\">\n      <sISBN>0-19-852663-6</sISBN>\n    </IsValidISBN10>\n  </soap:Body>\n</soap:Envelope>"
+				},
+				"url": {
+					"raw": "http://webservices.daehosting.com/services/isbnservice.wso",
+					"protocol": "http",
+					"host": [
+						"webservices",
+						"daehosting",
+						"com"
+					],
+					"path": [
+						"services",
+						"isbnservice.wso"
+					]
+				},
+				"description": "The test is done by calculation on the first 9 digits and compare the result with the checksum number at the end. You have to pass a 10 digits number or 8 digits and an X."
+			},
+			"response": []
+		}
+	]
+}
